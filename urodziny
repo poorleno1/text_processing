@@ -1,0 +1,20 @@
+#/bin/bash
+echo "Subject,Start date,Start time,End Date,End Time,All Day Event,Description,Location,Private"
+for i in $( awk -F":" '{print $1}' /vagrant/out2.txt | uniq ); do
+#        echo item: $i
+#	grep $i /vagrant/out2.txt | grep -v -i dewiza | grep -v -i prezbiteratu
+urodzony=`grep $i /vagrant/out2.txt | grep -i urodzony| sed -e 's/'"$i:"'//g' | awk -F" " '{print $2}'| awk -F"." '{print $1"."$2".2018"}'`
+swiecenia=`grep -i $i /vagrant/out2.txt  | grep -i święcenia | grep -v prezbiteratu | awk -F":" '{print $3}' | awk -F"." '{print $1"."$2".2018"}'`
+#echo "$i"
+A=`echo $i|sed 's:-: :g'`
+B=( $A )
+	
+	#grep $i /vagrant/out2.txt  | sed -e 's/'"$i:"'//g' | awk '{printf("%s, ", $0)}'
+	con=`grep $i /vagrant/out2.txt |grep -v -i dewiza | grep -v -i prezbiteratu  | sed -e 's/'"$i:"'//g' | sed -e 's/,/-/g' | awk '{printf("%s; ", $0)}'`
+	#concat = "$(grep biskup /vagrant/out2.txt)"
+
+# | sed -e 's/'"$i:"'//g' | awk '{printf("%s, ", $0)}')"
+echo "${B[@]^}"";"$con","$urodzony",,,,True,,,"
+
+done
+
